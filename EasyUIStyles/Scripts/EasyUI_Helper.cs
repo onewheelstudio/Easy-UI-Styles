@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 
 
@@ -1290,21 +1291,16 @@ namespace EasyUIStyle
             EasyUI_Style_Data easyUI_Data = null;
 #if UNITY_EDITOR
 
-            easyUI_Data = UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Plugins/EasyUIStyles/Resources/EasyUIData.asset", typeof(EasyUI_Style_Data)) as EasyUI_Style_Data;
+            easyUI_Data = Resources.Load<EasyUI_Style_Data>("EasyUIData");
+            
+            if (easyUI_Data != null) return easyUI_Data;
+            
+            string[] guids = UnityEditor.AssetDatabase.FindAssets("EasyUIData");
 
-            //attempt to find data in other folder
-            if (easyUI_Data == null)
-            {
-                Debug.Log("Couldn't find data at path");
-
-                string[] guids = UnityEditor.AssetDatabase.FindAssets("EasyUIData.asset");
-
-                if (guids.Length > 0)
-                {
-                    string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
-                    easyUI_Data = UnityEditor.AssetDatabase.LoadAssetAtPath(path, typeof(EasyUI_Style_Data)) as EasyUI_Style_Data;
-                }
-            }
+            if (guids.Length == 0) throw new FileNotFoundException($"Failed to find EasyUIData asset in project");
+            
+            string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
+            easyUI_Data = UnityEditor.AssetDatabase.LoadAssetAtPath(path, typeof(EasyUI_Style_Data)) as EasyUI_Style_Data;
 #endif
             return easyUI_Data;
         }
