@@ -200,24 +200,6 @@ namespace EasyUIStyle
                 return;
         }
 
-        public void LoadData()
-        {
-#if UNITY_EDITOR
-            easyUI_Data = UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Plugins/EasyUIStyles/Resources/EasyUIData.asset", typeof(EasyUI_Style_Data)) as EasyUI_Style_Data;
-
-            //attempt to find data in other folder
-            if (easyUI_Data == null)
-            {
-                string[] guids = UnityEditor.AssetDatabase.FindAssets("EasyUIData.asset");
-                if (guids.Length > 0)
-                {
-                    string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
-                    easyUI_Data = UnityEditor.AssetDatabase.LoadAssetAtPath(path, typeof(EasyUI_Style_Data)) as EasyUI_Style_Data;
-                }
-            }
-#endif
-        }
-
         public void UpdateTextFormat()
         {
             if (easyUI_Data.textList.Count == 0)
